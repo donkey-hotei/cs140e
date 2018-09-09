@@ -1,0 +1,8 @@
+GPFSEL registers are organized per ten pins, which means each 32-bit register contains
+the setup bits for ten pins. Selecting GPIO pin 16 as output then requires writing the
+bit pattern 001 to register GPFSEL1 (setup bits for pins 10 to 19). The three bits in
+GPFSEL1 are located in the 18 to 20 bits from the left. Setting and clearing then simply
+involves turning on the 16th bit of the GPSET0 and GPCLR0 registers. Doing the same for
+pin 17 would require writing 001 to the 21-23rd bits of GPFSEL2, and flipping the 27th
+bit of GPSET0 and GPCLR0. GPIO 27 is mapped to the 7th pin from the left on the bottom
+row of the Rasperry PI's header pins.
