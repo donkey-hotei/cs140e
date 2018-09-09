@@ -1,0 +1,4 @@
+First, implementing the `Clone` trait for `MyType` allows us to borrow the immutable value
+`x`. This works by creating a deep copy of the value, this allowing `y` to borrow `x`.
+Implmenting the `Copy` trait by deriving it for `MyType` allows us to move (i.e: transfer
+ownership of) the borrowed content in `*y` to `z`.

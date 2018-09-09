@@ -1,0 +1,8 @@
+Move semantics in Rust. Rust implements what is called an Affine Type System.
+"Affline types are a version of linear types imposing weaker contraints,
+corresponding to affine logic. _An affine resource can only be used once_,
+while a linear resources must be used once."
+So, `MyType` had initially derived the `Copy` trait and are thus moveable.
+Removing `Copy` from the `derive` macro's arguments makes it so that when
+ownership of `x` (type `MyType`) is transferred to `y`, Rust will forbid
+transferring ownership of `x` to `z` _again_.
