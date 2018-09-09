@@ -1,0 +1,4 @@
+In order to allow `x`'s value to be borrowed as an immutable reference as well
+as a mutable referece, we can place curly brackets around this statement and the following
+assertion to create a new scope, allowing for both immutable and mutable references
+(or even mulitple mutable references).
