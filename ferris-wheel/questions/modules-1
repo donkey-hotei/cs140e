@@ -1,0 +1,4 @@
+By default, functions, types, constants and modules are private. The `pub`
+keyword makes them public and available outside of their namespace. To prevent
+module-1 from compiling we simply remove the `pub` keyword to make the function
+`f` private and unavailble for use in `main`.
