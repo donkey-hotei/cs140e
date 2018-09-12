@@ -1,0 +1,10 @@
+The first fix was to put the generic type T within the scope of the Read trait
+implementation for ReadWrapper, itself taking a generic type parameter. Though,
+it's important to note that we can't simply write `impl<T>` as it does not
+constrain the type enough so that it's possible to wrap is using our `ReadWrapper`
+struct, which takes a generic type T that implements the trait io::Read.
+
+The next bug is that the return value of `read` is `Result`, which is a struct
+that takes two type parameters but is only given one in this context. I first
+tried using the type `&str` as the second type arguments but it was apprarently
+incompatible type for `read`. Using `io::Error` worked fine.
