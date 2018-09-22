@@ -1,0 +1,2 @@
+Remove semicolon from statement in `add` to turn it into an expression s.t.
+it's value will be returned.
