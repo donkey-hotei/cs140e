@@ -1,0 +1,1 @@
+To bring the method `foo` into the scope of `main` we add a `use` for it.
