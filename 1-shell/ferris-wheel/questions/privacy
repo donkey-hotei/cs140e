@@ -1,0 +1,3 @@
+All functions, constants, types, &c are, by default, private when defined
+within a module. In order to make use of them outside of their module, one
+must use the `pub` keyword to make them publicly available.
