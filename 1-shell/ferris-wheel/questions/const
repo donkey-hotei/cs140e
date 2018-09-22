@@ -1,0 +1,2 @@
+To call a function in a const expression we need to enable the `const_fn` feature introduced
+in RFC 911 and then add `const` to the function definition to make it a `const fn`.

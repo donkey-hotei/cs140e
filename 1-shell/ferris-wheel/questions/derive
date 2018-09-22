@@ -1,0 +1,3 @@
+In order to println the `Duration` enum type we have to implement the `Debug` trait.
+In order to use a value after it's been moved (ownership of it's value transferred) we
+have to implement `Clone` and `Copy` so that the value is actually copied when being moved.

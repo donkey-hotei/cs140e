@@ -1,0 +1,7 @@
+The bug was in the `match` conditional of the `matcher` function.
+`matcher`'s only argument `val`, a _reference_ to `MyEnum`, the value
+held by each of it's variants was bound to `string` in their respective
+`match` arms despite `val` being borrowed. This prevented the held 
+value from being moved into `string`. This was fixed by _not dereferencing_
+`val` in the match. Adding `ref` to both references to `string` would have
+also helped prevent a move.

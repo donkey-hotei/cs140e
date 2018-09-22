@@ -1,0 +1,4 @@
+The make_1 function of MyStruct attempted to mutably borrow an
+immutable field. To change this we ensure that the referernce to `self`
+is a mutable reference. This also means every name we bind a `MyStruct`
+to should be a mutable variable if it's ever to call `make_1` legally.
