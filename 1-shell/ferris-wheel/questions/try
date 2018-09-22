@@ -1,0 +1,4 @@
+First, to use the `?` operator to propagate errors from either the `do_a` or
+`do_b` functions, s.t. we can return a result, we implement both the
+`std::convert::From<ErrorA>` and `std::convert::From<ErrorB>` traits on the
+`Error` type.
