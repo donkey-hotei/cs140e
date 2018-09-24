@@ -5,6 +5,34 @@ struct Builder {
     number: Option<usize>,
 }
 
+impl Builder {
+    pub fn default() -> Builder {
+        Builder {
+            string: None,
+            number: None
+        }
+    }
+
+    pub fn string<T: Into<String>>(&mut self, string: T) -> &mut Self {
+        self.string = Some(string.into());
+        self
+    }
+
+    pub fn number(&mut self, number: usize) -> &mut Self {
+        self.number = Some(number);
+        self
+    }
+
+    pub fn to_string(&self) -> String {
+        match (&self.string, &self.number) {
+            (Some(string), Some(number)) => format!("{} {}", string, number),
+            (Some(string), None)         => format!("{}", string),
+            (None, Some(number))         => format!("{}", number),
+            (None, None)                 => "".to_string()
+        }
+    }
+}
+
 // Do not modify this function.
 fn main() {
     let empty = Builder::default().to_string();

@@ -1,0 +1,6 @@
+Here we implement the builder pattern, ensuring the return type of
+each setter method is the builder itself. The trickiest part was getting
+the `Builder#string` method to accept both string slices `&str` as well as
+`String` types. To do this we use the `Into` trait so that `&str` will
+automatically be converted to `String` without the caller having to
+explicitly call `&str#to_string()`.
