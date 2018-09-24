@@ -1,0 +1,3 @@
+Without being able to `use std::cmp::max` I defined my own `max` function
+that constrained the types of it's arguments to have the `PartialOrd` trait
+as it's derived for the `IntWrapper` type.
