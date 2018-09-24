@@ -1,0 +1,3 @@
+To disambiguate which method we need we use the universal function call
+syntax. Rust automatically borrows `dummy` and calls the `foo` method
+based on the trait being used.
