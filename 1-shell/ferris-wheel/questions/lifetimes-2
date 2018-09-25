@@ -1,0 +1,2 @@
+Add a generic lifetime `'a` to `RefWrapper`'s trait implementation of
+`.inner()` and contstrain the generic type `T` to a lifetime of `'a`.
