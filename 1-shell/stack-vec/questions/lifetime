@@ -1,0 +1,4 @@
+Adding a lifetime bound on the generic slice type help Rust verify that the references in
+the generic type won't outlive the data they're referencing. If this lifetime bound over
+a generic type wasn't enforced by Rust then it would be possibl that the data referenced
+would be free and the pointers to that data would be left dangling.
