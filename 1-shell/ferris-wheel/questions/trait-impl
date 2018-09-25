@@ -1,0 +1,2 @@
+Implemented the `PartialEq` trait for each variamt of duration which
+normalizes all variants to minutes using the `.to_minutes()` method.
