@@ -1,0 +1,2 @@
+Ensure that the string slice returned by `.inner()` will live at
+least as our generic lifetime `'a`.
