@@ -1,0 +1,3 @@
+Bind type `T` to lifetime `'a` in `RefWrapper` and introduce lifetimes
+`'a'`, `'b`, and generic type `T` while binding `T` to lifetime `'a` and
+constraining lifetime `'a` to live for at least as long as `'b`.
