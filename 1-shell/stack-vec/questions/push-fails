@@ -1,0 +1,2 @@
+`StackVec::push()` can fail when it is already at capacity, whereas `Vec::push()` will
+allocate more memory on the heap as needed.
