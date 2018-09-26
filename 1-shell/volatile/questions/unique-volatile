@@ -1,0 +1,6 @@
+`Volatile` is a wrapper type that enforces _volatile_ (read *or* write) accesses to a
+raw pointer. The `Volatile` type also supports aliasing the value pointed to by it's
+wrapped pointer. On the other hand we have `UniqueVolatile` which is also a wrapper type
+that enforces _volatile_ (read *or* write) access to an underlying raw pointer, the
+difference here is that it implements `Sync + Send` and thus must be the only accessible
+mutable reference to the value pointed to by the underlying pointer.
