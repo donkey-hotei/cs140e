@@ -1,0 +1,4 @@
+`StackVec` requires `T: Clone` to `pop()` because the backing storage is a fixed-sized
+array whose elements may not be moved out of the array without having implemented the
+`Copy` trait. The Rust compiler will not allow one to move an element out of the array
+without being able to copy it. Thus, we constrain `T` to be a `Clone`.

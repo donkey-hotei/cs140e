@@ -1,0 +1,7 @@
+We we the `Deref` trait being used in the tests anywhere where we see array indexing `[]`
+on the `StackVec`. This is because `container[index]` is just syntactic sugar for
+`*container.index[index]` and our `*` will return a `&[T]` (which supports indexing) by
+calling `as_slice()` on our `StackVec`. The `as_slice()` methods comes from our implementation
+of `IntoIterator` for the `StackVec` type.
+
+`DerefMut` is used anywhere we see assignment to one of the `StackVec`'s elements.
