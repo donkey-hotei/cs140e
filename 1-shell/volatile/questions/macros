@@ -1,0 +1,3 @@
+The `readable_writeable`, `readable`, and `writeable` macros mark the passed in
+type identifier as read/write, read, or write repsectively by implementing the correct
+trait for that type.

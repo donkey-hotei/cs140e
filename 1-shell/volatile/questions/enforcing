@@ -1,0 +1,4 @@
+`ReadVolatile` makes it impossible to write to the underlying pointer by using a
+non-mutable reference and by only implementing the `read` method. `WriteVolatile`
+uses a mutable reference to the underlying pointer and implements the `write` method but
+not the `read` method - preventing reads on a raw pointer wrapped with `WriteVolatile`.

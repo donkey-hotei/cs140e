@@ -1,6 +1,5 @@
 #![feature(const_fn)]
 #![feature(decl_macro)]
-#![feature(unique)]
 #![feature(ptr_internals)]
 #![no_std]
 
@@ -145,7 +144,7 @@ impl<T> Volatile<T> {
     ///
     /// The caller _must_ guarantee that `ptr` points to a value of type `T`
     /// that is valid for the `'static` lifetime. This type allows aliasing the
-    /// value pointed to by `ptr` and thus cannot implement `Send + Send`. If
+    /// value pointed to by `ptr` and thus cannot implement `Sync + Send`. If
     /// `ptr` is guaranteed to be the only pointer to the value, use
     /// `UniqueVolatile` instead.
     pub const unsafe fn new(ptr: *mut T) -> Volatile<T> {

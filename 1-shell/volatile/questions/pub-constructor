@@ -1,0 +1,3 @@
+The benefits of ensuring that all values are constructed using the `new` static method is
+that it is explicitly labeled as `unsafe` which gives the caller safety information and
+distinguishes it from simple `struct` initialization.

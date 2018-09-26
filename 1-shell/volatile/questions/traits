@@ -1,0 +1,4 @@
+One benefit of relying on implementations of certain methods coming from certain traits
+is that use of those methods on a type are enforceable by the compiler. Another is that it
+not only makes explicit what one can do with the given pointer passed to `new`, but allows
+these traits to be mixed and match to allow desired permissions.
