@@ -152,7 +152,6 @@ impl<'a, T> IntoIterator for StackVec<'a, T> {
     }
 }
 
-// FIXME: Implement IntoIterator` for `&StackVec`.
 impl<'a, T> IntoIterator for &'a StackVec<'a, T> {
     type Item = &'a T;
     type IntoIter = Iter<'a, T>;
