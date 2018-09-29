@@ -205,7 +205,7 @@ fn test_small_packet_eof_error() {
 #[test]
 fn test_bad_control() {
     let mut packet = [0; 128];
-    let e = Xmodem::new(Cursor::new(vec![0, CAN]))
+    let e = Xmodem::new(Cursor::new(vec![CAN, 0]))
         .read_packet(&mut packet[..])
         .expect_err("CAN");
 
@@ -213,7 +213,7 @@ fn test_bad_control() {
 
     let e = Xmodem::new(Cursor::new(vec![0, 0xFF]))
         .read_packet(&mut packet[..])
-        .expect_err("bad contorl");
+        .expect_err("bad control");
 
     assert_eq!(e.kind(), io::ErrorKind::InvalidData);
 }
