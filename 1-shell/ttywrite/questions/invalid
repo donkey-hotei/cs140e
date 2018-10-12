@@ -1,0 +1,3 @@
+There are a number of custom string parsers in `parsers.rs` to parse command line flags
+to a few types from the serial crate that don't have a `FromStr` implementation. These
+parsers will error out if the values passed in are invalid.

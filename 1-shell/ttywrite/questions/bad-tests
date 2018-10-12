@@ -1,0 +1,3 @@
+Testing that the ttywrite utility uses the XMODEM protocol when asked to would require
+that the test itself implements the sender side of the XMODEM protocol, making testing
+that much more difficult.
