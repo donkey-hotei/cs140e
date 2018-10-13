@@ -1,0 +1,3 @@
+We can't write to timer registers CLO and CHI because they have type ReadVolatile<u32>,
+our wrapper type that enforces _read-only_ volatile access to a raw pointer as it only
+has the `Readable` trait implemented for it (only implementing `read` and not `write`).
