@@ -51,7 +51,7 @@
 #![feature(libc)]
 #![feature(link_args)]
 #![feature(linkage)]
-#![feature(macro_reexport)]
+#![feature(use_extern_macros)]
 #![feature(macro_vis_matcher)]
 #![feature(needs_panic_runtime)]
 #![feature(never_type)]
@@ -116,12 +116,15 @@ use prelude::v1::*;
 // We want to re-export a few macros from core but libcore has already been
 // imported by the compiler (via our #[no_std] attribute) In this case we just
 // add a new crate name so we can attach the re-exports to it.
-#[macro_reexport(panic, assert, assert_eq, assert_ne, debug_assert, debug_assert_eq,
-                 debug_assert_ne, unreachable, unimplemented, write, writeln, try)]
+pub use core::{
+    panic, assert, assert_eq, assert_ne, debug_assert, debug_assert_eq,
+    debug_assert_ne, unreachable, unimplemented, write, writeln, try
+};
+
 extern crate core as __core;
 
 // #[macro_use]
-// #[macro_reexport(vec, format)]
+// pub use alloc::{vec, format};
 // extern crate alloc;
 // extern crate alloc_system;
 
@@ -135,7 +138,7 @@ extern crate core as __core;
 
 // compiler-rt intrinsics
 #[doc(masked)]
-extern crate compiler_builtins;
+extern crate compiler_builtins as __compiler_builtins;
 
 // // During testing, this crate is not actually the "real" std library, but rather
 // // it links to the real std library, which was compiled from this same source
