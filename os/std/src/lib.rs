@@ -124,7 +124,7 @@ extern crate core as __core;
 // #[macro_reexport(vec, format)]
 // extern crate alloc;
 // extern crate alloc_system;
-extern crate std_unicode;
+
 // #[doc(masked)]
 // extern crate libc;
 
