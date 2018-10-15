@@ -1,4 +1,4 @@
-// Copyright 2013 The Rust Project Developers. See the COPYRIGHT
+// Copyright 2014 The Rust Project Developers. See the COPYRIGHT
 // file at the top-level directory of this distribution and at
 // http://rust-lang.org/COPYRIGHT.
 //
@@ -8,54 +8,49 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-//! The first version of the prelude of The Rust Standard Library.
+//! The core prelude
 //!
-//! See the [module-level documentation](../index.html) for more.
+//! This module is intended for users of libcore which do not link to libstd as
+//! well. This module is imported by default when `#![no_std]` is used in the
+//! same manner as the standard library's prelude.
 
-#![stable(feature = "rust1", since = "1.0.0")]
+#![stable(feature = "core_prelude", since = "1.4.0")]
 
 // Re-exported core operators
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use marker::{Copy, Send, Sized, Sync};
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use ops::{Drop, Fn, FnMut, FnOnce};
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use marker::{Copy, Send, Sized, Sync};
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use ops::{Drop, Fn, FnMut, FnOnce};
 
 // Re-exported functions
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use mem::drop;
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use mem::drop;
 
 // Re-exported types and traits
-// #[stable(feature = "rust1", since = "1.0.0")]
-// #[doc(no_inline)] pub use boxed::Box;
-// #[stable(feature = "rust1", since = "1.0.0")]
-// #[doc(no_inline)] pub use borrow::ToOwned;
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use clone::Clone;
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use cmp::{PartialEq, PartialOrd, Eq, Ord};
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use convert::{AsRef, AsMut, Into, From};
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use default::Default;
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use iter::{Iterator, Extend, IntoIterator};
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use iter::{DoubleEndedIterator, ExactSizeIterator};
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use option::Option::{self, Some, None};
-#[stable(feature = "rust1", since = "1.0.0")]
-#[doc(no_inline)] pub use result::Result::{self, Ok, Err};
-// #[stable(feature = "rust1", since = "1.0.0")]
-// #[doc(no_inline)] pub use slice::SliceConcatExt;
-// #[stable(feature = "rust1", since = "1.0.0")]
-// #[doc(no_inline)] pub use string::{String, ToString};
-// #[stable(feature = "rust1", since = "1.0.0")]
-// #[doc(no_inline)] pub use vec::Vec;
-
-// TODO: These are additions!
-#[stable(feature = "rust1", since = "1.0.0")]
-pub use core::slice::SliceExt;
-#[stable(feature = "rust1", since = "1.0.0")]
-pub use core::str::StrExt;
-#[stable(feature = "addition", since = "1.0.0")]
-pub use std_unicode::str::*;
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use clone::Clone;
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use cmp::{PartialEq, PartialOrd, Eq, Ord};
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use convert::{AsRef, AsMut, Into, From};
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use default::Default;
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use iter::{Iterator, Extend, IntoIterator};
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use iter::{DoubleEndedIterator, ExactSizeIterator};
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use option::Option::{self, Some, None};
+#[stable(feature = "core_prelude", since = "1.4.0")]
+#[doc(no_inline)]
+pub use result::Result::{self, Ok, Err};
