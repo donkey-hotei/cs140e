@@ -7,6 +7,7 @@
 // <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
+#![stable(feature= "rust1", since = "1.0.0")]
 
 // Don't link to std. We are std.
 #![no_std]
@@ -103,6 +104,8 @@
 #![feature(pattern)]
 #![feature(unicode_internals)]
 #![feature(split_ascii_whitespace)]
+#![feature(panic_implementation)]
+#![feature(core_panic_info)]
 
 #![default_lib_allocator]
 
@@ -129,7 +132,7 @@ use prelude::v1::*;
 
 // Re-export a few macros from core
 #[stable(feature = "rust1", since = "1.0.0")]
-pub use core::{assert_eq, assert_ne, debug_assert, debug_assert_eq, debug_assert_ne};
+pub use core::{panic, assert_eq, assert_ne, debug_assert, debug_assert_eq, debug_assert_ne};
 #[stable(feature = "rust1", since = "1.0.0")]
 pub use core::{unreachable, unimplemented, write, writeln, try};
 
