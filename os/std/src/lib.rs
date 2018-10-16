@@ -16,7 +16,7 @@
 #![deny(missing_debug_implementations)]
 
 // Tell the compiler to link to either panic_abort or panic_unwind
-#![needs_panic_runtime]
+// #![needs_panic_runtime]
 
 // std may use features in a platform-specific way
 #![allow(unused_features)]
