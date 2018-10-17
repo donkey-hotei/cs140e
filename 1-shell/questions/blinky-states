@@ -1,0 +1,3 @@
+In assignment zero we implemented a subset of the state machine mentioned in
+that it only had two states START and OUTPUT, with a transition from START to
+OUTPUT and two "self" transitions on OUTPUT: SET and CLEAR.
