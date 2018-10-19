@@ -1,0 +1,4 @@
+If a user were allowed to fabricate the initial state for a `Gpio` structure then it's
+possible they could invalidate the hardware specficiation. For example if they were
+allowed to fabricate the intial state as `Gpio<Input>` without the pin actually being
+initialized a input, then any following transition or state change would be invalid.
