@@ -39,9 +39,7 @@ impl Timer {
 
 /// Returns the current time in microseconds.
 pub fn current_time() -> u64 {
-    let timer = Timer::new();
-
-    timer.read()
+    Timer::new().read()
 }
 
 /// Spins until `us` microseconds have passed.
