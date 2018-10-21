@@ -7,14 +7,14 @@ use volatile::{Volatile, WriteVolatile, ReadVolatile, Reserved};
 /// An alternative GPIO function.
 #[repr(u8)]
 pub enum Function {
-    Input = 0b000,
+    Input  = 0b000,
     Output = 0b001,
-    Alt0 = 0b100,
-    Alt1 = 0b101,
-    Alt2 = 0b110,
-    Alt3 = 0b111,
-    Alt4 = 0b011,
-    Alt5 = 0b010
+    Alt0   = 0b100,
+    Alt1   = 0b101,
+    Alt2   = 0b110,
+    Alt3   = 0b111,
+    Alt4   = 0b011,
+    Alt5   = 0b010
 }
 
 #[repr(C)]
@@ -55,7 +55,7 @@ states! {
 ///
 /// The `State` generic always corresponds to an uninstantiatable type that is
 /// use solely to mark and track the state of a given GPIO pin. A `Gpio`
-/// structure starts in the `Uninitialized` state and must be transitions into
+/// structure starts in the `Uninitialized` state and must be transitioned into
 /// one of `Input`, `Output`, or `Alt` via the `into_input`, `into_output`, and
 /// `into_alt` methods before it can be used.
 pub struct Gpio<State> {
@@ -102,7 +102,15 @@ impl Gpio<Uninitialized> {
     /// Enables the alternative function `function` for `self`. Consumes self
     /// and returns a `Gpio` structure in the `Alt` state.
     pub fn into_alt(self, function: Function) -> Gpio<Alt> {
-        unimplemented!()
+        let fsel_index = self.pin / 10;
+        // 10 pins per GPFSELn register, 3-bits per FSEL{n} field (i.e: per pin)
+        let pin_offset = self.pin - (fsel_index * 10) * 3;
+
+        (*self.registers)
+            .FSEL[fsel_index as usize]
+            .or_mask((function as u32) << pin_offset);
+
+        self.transition()
     }
 
     /// Sets this pin to be an _output_ pin. Consumes self and returns a `Gpio`
@@ -121,12 +129,28 @@ impl Gpio<Uninitialized> {
 impl Gpio<Output> {
     /// Sets (turns on) the pin.
     pub fn set(&mut self) {
-        unimplemented!()
+        if self.pin < 32 {
+            (*self.registers)
+                .SET[0]
+                .write(0b1 << self.pin);
+        } else {
+            (*self.registers)
+                .SET[1]
+                .write(0b1 << (self.pin - 32));
+        }
     }
 
     /// Clears (turns off) the pin.
     pub fn clear(&mut self) {
-        unimplemented!()
+        if self.pin < 32 {
+            (*self.registers)
+                .CLR[0]
+                .write(0b1 << self.pin);
+        } else {
+            (*self.registers)
+                .CLR[1]
+                .write(0b1 << (self.pin - 32));
+        }
     }
 }
 
@@ -134,6 +158,14 @@ impl Gpio<Input> {
     /// Reads the pin's value. Returns `true` if the level is high and `false`
     /// if the level is low.
     pub fn level(&mut self) -> bool {
-        unimplemented!()
+        if self.pin < 32 {
+            (*self.registers)
+                .LEV[0]
+                .has_mask(0b1 << self.pin)
+        } else {
+            (*self.registers)
+                .LEV[1]
+                .has_mask(0b1 << (self.pin - 32))
+        }
     }
 }
