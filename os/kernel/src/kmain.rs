@@ -16,20 +16,54 @@ pub mod mutex;
 pub mod console;
 pub mod shell;
 
-const GPIO_BASE: usize     = 0x3F000000 + 0x200000;
-const GPIO_FSEL1: *mut u32 = (GPIO_BASE + 0x04) as *mut u32;
-const GPIO_SET0: *mut u32  = (GPIO_BASE + 0x1C) as *mut u32;
-const GPIO_CLR0: *mut u32  = (GPIO_BASE + 0x28) as *mut u32;
+use pi::gpio::Gpio;
+use pi::timer::{spin_sleep_ms};
 
 #[no_mangle]
 pub unsafe extern "C" fn kmain() {
-    GPIO_FSEL1.write_volatile(GPIO_FSEL1.read_volatile() | 0x1 << 0x12);
+    let pin16 = Gpio::new(16);
+    let pin05 = Gpio::new(5);
+    let pin06 = Gpio::new(6);
+    let pin13 = Gpio::new(13);
+    let pin21 = Gpio::new(21);
+    let pin20 = Gpio::new(20);
+
+    let mut pin16 = pin16.into_output();
+    let mut pin05 = pin05.into_output();
+    let mut pin06 = pin06.into_output();
+    let mut pin13 = pin13.into_output();
+    let mut pin21 = pin21.into_output();
+    let mut pin20 = pin20.into_output();
 
     loop {
-        GPIO_SET0.write_volatile(GPIO_SET0.read_volatile() | 0x1 << 0x10);
-        pi::timer::spin_sleep_ms(250);
-        GPIO_CLR0.write_volatile(GPIO_CLR0.read_volatile() | 0x1 << 0x10);
-        pi::timer::spin_sleep_ms(250);
-    }
+        pin16.set();
+        spin_sleep_ms(250);
+        pin16.clear();
+        spin_sleep_ms(250);
 
+        pin05.set();
+        spin_sleep_ms(250);
+        pin05.clear();
+        spin_sleep_ms(250);
+
+        pin06.set();
+        spin_sleep_ms(250);
+        pin06.clear();
+        spin_sleep_ms(250);
+
+        pin13.set();
+        spin_sleep_ms(250);
+        pin13.clear();
+        spin_sleep_ms(250);
+
+        pin21.set();
+        spin_sleep_ms(250);
+        pin21.clear();
+        spin_sleep_ms(250);
+
+        pin20.set();
+        spin_sleep_ms(250);
+        pin20.clear();
+        spin_sleep_ms(250);
+    }
 }
