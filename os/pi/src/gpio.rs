@@ -136,7 +136,7 @@ impl Gpio<Output> {
         let index = (self.pin / 32) as usize;
         let shift = self.pin as usize - index * 32;
 
-        (*self.registers)
+        self.registers
             .SET[index]
             .write(1 << shift);
     }
@@ -146,7 +146,7 @@ impl Gpio<Output> {
         let index = (self.pin / 32) as usize;
         let shift = self.pin as usize - index * 32;
 
-        (*self.registers)
+        self.registers
             .CLR[index]
             .write(1 << shift);
     }
@@ -159,7 +159,7 @@ impl Gpio<Input> {
         let index = (self.pin / 32) as usize;
         let shift = self.pin as usize - index * 32;
 
-        (*self.registers)
+        self.registers
             .LEV[index]
             .has_mask(1 << shift)
     }
