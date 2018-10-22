@@ -129,28 +129,22 @@ impl Gpio<Uninitialized> {
 impl Gpio<Output> {
     /// Sets (turns on) the pin.
     pub fn set(&mut self) {
-        if self.pin < 32 {
-            (*self.registers)
-                .SET[0]
-                .write(0b1 << self.pin);
-        } else {
-            (*self.registers)
-                .SET[1]
-                .write(0b1 << (self.pin - 32));
-        }
+        let index = (self.pin / 32) as usize;
+        let shift = self.pin as usize - index * 32;
+
+        (*self.registers)
+            .SET[index]
+            .write(1 << shift);
     }
 
     /// Clears (turns off) the pin.
     pub fn clear(&mut self) {
-        if self.pin < 32 {
-            (*self.registers)
-                .CLR[0]
-                .write(0b1 << self.pin);
-        } else {
-            (*self.registers)
-                .CLR[1]
-                .write(0b1 << (self.pin - 32));
-        }
+        let index = (self.pin / 32) as usize;
+        let shift = self.pin as usize - index * 32;
+
+        (*self.registers)
+            .CLR[index]
+            .write(1 << shift);
     }
 }
 
@@ -158,14 +152,11 @@ impl Gpio<Input> {
     /// Reads the pin's value. Returns `true` if the level is high and `false`
     /// if the level is low.
     pub fn level(&mut self) -> bool {
-        if self.pin < 32 {
-            (*self.registers)
-                .LEV[0]
-                .has_mask(0b1 << self.pin)
-        } else {
-            (*self.registers)
-                .LEV[1]
-                .has_mask(0b1 << (self.pin - 32))
-        }
+        let index = (self.pin / 32) as usize;
+        let shift = self.pin as usize - index * 32;
+
+        (*self.registers)
+            .LEV[index]
+            .has_mask(1 << shift)
     }
 }
