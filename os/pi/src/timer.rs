@@ -46,11 +46,8 @@ pub fn current_time() -> u64 {
 pub fn spin_sleep_us(us: u64) {
     let start = current_time();
 
-    loop {
-        let curr = current_time();
-        if curr >= start + us {
-            break;
-        }
+    while current_time() <= start + us {
+        // ...
     }
 }
 
