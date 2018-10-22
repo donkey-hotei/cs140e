@@ -102,12 +102,16 @@ impl Gpio<Uninitialized> {
     /// Enables the alternative function `function` for `self`. Consumes self
     /// and returns a `Gpio` structure in the `Alt` state.
     pub fn into_alt(self, function: Function) -> Gpio<Alt> {
-        let fsel_index = self.pin / 10;
+        let fsel_index = self.pin as usize / 10;
         // 10 pins per GPFSELn register, 3-bits per FSEL{n} field (i.e: per pin)
-        let pin_offset = self.pin - (fsel_index * 10) * 3;
+        let pin_offset = (self.pin as usize % 10) * 3;
 
-        (*self.registers)
-            .FSEL[fsel_index as usize]
+        // clear function bits for pin
+        self.registers.FSEL[fsel_index]
+            .and_mask(!(0b111 << pin_offset));
+
+        // write new function bits
+        self.registers.FSEL[fsel_index]
             .or_mask((function as u32) << pin_offset);
 
         self.transition()
