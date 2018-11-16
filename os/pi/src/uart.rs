@@ -23,17 +23,17 @@ enum LsrStatus {
 #[repr(C)]
 #[allow(non_snake_case)]
 struct Registers {
-    IO: Volatile<u32>,  // I/O data
-    IER: Volatile<u32>,  // Interrupt Enable
-    IIR: Volatile<u32>,  // Interrupt Identify
-    LCR: Volatile<u32>,  // Line Control
-    MCR: Volatile<u32>,  // Modem Control
-    LSR: ReadVolatile<u32>,  // Line Status
-    MSR: Volatile<u32>,  // Modem Status,
-    SCRATCH: Reserved<u32>,  // Scratch
-    CNTL: Volatile<u32>,  // Extra Control
-    STAT: Volatile<u32>, // Extra Status
-    BAUD: Volatile<u32>, // Baud Rate
+    IO: Volatile<u32>,
+    IER: Volatile<u32>,
+    IIR: Volatile<u32>,
+    LCR: Volatile<u32>,
+    MCR: Volatile<u32>,
+    LSR: ReadVolatile<u32>,
+    MSR: Volatile<u32>,
+    SCRATCH: Reserved<u32>,
+    CNTL: Volatile<u32>,
+    STAT: Volatile<u32>,
+    BAUD: Volatile<u32>,
 }
 
 /// The Raspberry Pi's "mini UART".
@@ -85,13 +85,14 @@ impl MiniUart {
     /// in the output FIFO.
     pub fn write_byte(&mut self, byte: u8) {
         while
-            !self.registers.LSR
-            .has_mask(LsrStatus::TxAvailable as u32) { 
-            continue // ...
+            !(self.registers.LSR
+            .has_mask(LsrStatus::TxAvailable as u32)) {
+
+            // ...
         }
 
         self.registers.IO.write(byte as u32);
-    } 
+    }
 
     /// Returns `true` if there is at least one byte ready to be read. If this
     /// method returns `true`, a subsequent call to `read_byte` is guaranteed to
@@ -126,7 +127,7 @@ impl MiniUart {
     /// Reads a byte. Blocks indefinitely until a byte is ready to be read.
     pub fn read_byte(&mut self) -> u8 {
         while !self.has_byte() {
-            continue // ...
+            // ...
         }
 
         (self.registers.IO.read() & 0xff) as u8
@@ -167,7 +168,7 @@ mod uart_io {
 
             match self.wait_for_byte() {
                 Ok(_) => {
-                    while bytes_read < buf.len() {
+                    while self.has_byte() && bytes_read < buf.len() {
                         buf[bytes_read] = self.read_byte();
                         bytes_read += 1;
                     }
