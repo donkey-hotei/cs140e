@@ -23,17 +23,22 @@ enum LsrStatus {
 #[repr(C)]
 #[allow(non_snake_case)]
 struct Registers {
-    IO: Volatile<u32>,
+    IO: Volatile<u8>,
+    __r0: [ Reserved<u8>; 3 ],
     IER: Volatile<u32>,
-    IIR: Volatile<u32>,
-    LCR: Volatile<u32>,
+    IIR: Volatile<u8>,
+    __r1: [ Reserved<u8>; 3],
+    LCR: Volatile<u8>,
+    __r2: [ Reserved<u8>; 3],
     MCR: Volatile<u32>,
     LSR: ReadVolatile<u32>,
     MSR: Volatile<u32>,
-    SCRATCH: Reserved<u32>,
+    SCRATCH: Reserved<u8>,
+    __r3: [ Reserved<u8>; 3 ],
     CNTL: Volatile<u32>,
     STAT: Volatile<u32>,
-    BAUD: Volatile<u32>,
+    BAUD: Volatile<u16>,
+    __r4: [ Volatile<u8>; 2],
 }
 
 /// The Raspberry Pi's "mini UART".
@@ -57,41 +62,37 @@ impl MiniUart {
             &mut *(MU_REG_BASE as *mut Registers)
         };
 
-        // set data-mode to 8-bits
-        registers.LCR.or_mask(3);
-
-        // set baud rate to ~115200
-        registers.BAUD.or_mask(270);
-
         Gpio::new(14).into_alt(Function::Alt5);
         Gpio::new(15).into_alt(Function::Alt5);
 
+        // set data-mode to 8-bits
+        registers.LCR.write(3); // 0b011
+
+        // set baud rate to ~115200
+        registers.BAUD.write(270);
+
         // clear receive and transmit FIFO's
-        registers.IIR.or_mask(6);
+        registers.IIR.write(6); // 0b110
 
         // enable transmitter/receiver
-        registers.CNTL.or_mask(3);
+        registers.CNTL.write(3); // 0b011
 
         MiniUart { registers, timeout: None }
     }
 
     /// Set the read timeout to `milliseconds` milliseconds.
     pub fn set_read_timeout(&mut self, milliseconds: u32) {
-        self.registers.BAUD
-            .or_mask(milliseconds as u32);
+        self.timeout = Some(milliseconds)
     }
 
     /// Write the byte `byte`. This method blocks until there is space available
     /// in the output FIFO.
     pub fn write_byte(&mut self, byte: u8) {
-        while
-            !(self.registers.LSR
-            .has_mask(LsrStatus::TxAvailable as u32)) {
-
+        while !(self.registers.LSR.has_mask(LsrStatus::TxAvailable as u32)) {
             // ...
         }
 
-        self.registers.IO.write(byte as u32);
+        self.registers.IO.write(byte);
     }
 
     /// Returns `true` if there is at least one byte ready to be read. If this
@@ -130,16 +131,14 @@ impl MiniUart {
             // ...
         }
 
-        (self.registers.IO.read() & 0xff) as u8
+        self.registers.IO.read() & 0xff
     }
 }
 
 
 impl fmt::Write for MiniUart {
     fn write_str(&mut self, s: &str) -> Result<(), fmt::Error> {
-        let bytes: &[u8] = s.as_bytes();
-
-        for &byte in bytes {
+        for byte in s.bytes() {
             // a b'\r' byte should be written before writing any newline
             if byte == b'\n' {
                 self.write_byte(b'\r');
