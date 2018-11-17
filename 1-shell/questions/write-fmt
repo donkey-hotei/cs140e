@@ -1,0 +1,4 @@
+`MutexGuard` implements `Deref` so implicit _Deref coercions_ will make a seqeuence of
+calls to the `deref` method to convert the the type provided (`MutexGuard` in this case)
+into a type which implements `Write`. Both `Console` and `MiniUart` implement the `Write`
+trait.
