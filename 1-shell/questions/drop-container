@@ -1,0 +1,2 @@
+If `&mut T` were returned instead then there would be no way to enforce thread-safety at
+run-time through the use of whatever concurrency primitive the container wrapper reprsents.
