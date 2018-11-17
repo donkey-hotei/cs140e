@@ -17,53 +17,40 @@ pub mod console;
 pub mod shell;
 
 use pi::gpio::Gpio;
-use pi::timer::{spin_sleep_ms};
+use pi::timer::spin_sleep_ms;
+use pi::uart::MiniUart;
+
+use std::io::{Read, Write as IoWrite};
 
 #[no_mangle]
 pub unsafe extern "C" fn kmain() {
-    let pin16 = Gpio::new(16);
-    let pin05 = Gpio::new(5);
-    let pin06 = Gpio::new(6);
-    let pin13 = Gpio::new(13);
-    let pin21 = Gpio::new(21);
-    let pin20 = Gpio::new(20);
+    let mut loading_leds = [
+        Gpio::new(5).into_output(),
+        Gpio::new(6).into_output(),
+        Gpio::new(13).into_output(),
+        Gpio::new(19).into_output(),
+        Gpio::new(26).into_output()
+    ];
 
-    let mut pin16 = pin16.into_output();
-    let mut pin05 = pin05.into_output();
-    let mut pin06 = pin06.into_output();
-    let mut pin13 = pin13.into_output();
-    let mut pin21 = pin21.into_output();
-    let mut pin20 = pin20.into_output();
+    for ref mut led in loading_leds.iter_mut() {
+        led.set();
+        spin_sleep_ms(100);
+    }
+
+    let mut uart = MiniUart::new();
+    let mut indicator_led = Gpio::new(16).into_output();
 
     loop {
-        pin16.set();
-        spin_sleep_ms(250);
-        pin16.clear();
-        spin_sleep_ms(250);
+        let mut buf = [0u8; 16];
 
-        pin05.set();
-        spin_sleep_ms(250);
-        pin05.clear();
-        spin_sleep_ms(250);
+        match uart.read(&mut buf) {
+            Ok(bytes) => {
+                uart.write(&buf[0..bytes]);
+            }
+        }
 
-        pin06.set();
-        spin_sleep_ms(250);
-        pin06.clear();
-        spin_sleep_ms(250);
-
-        pin13.set();
-        spin_sleep_ms(250);
-        pin13.clear();
-        spin_sleep_ms(250);
-
-        pin21.set();
-        spin_sleep_ms(250);
-        pin21.clear();
-        spin_sleep_ms(250);
-
-        pin20.set();
-        spin_sleep_ms(250);
-        pin20.clear();
-        spin_sleep_ms(250);
+        indicator_led.set();
+        spin_sleep_ms(25);
+        indicator_led.clear();
     }
 }
