@@ -18,9 +18,7 @@ pub mod shell;
 
 use pi::gpio::Gpio;
 use pi::timer::spin_sleep_ms;
-use pi::uart::MiniUart;
-
-use std::io::{Read, Write as IoWrite};
+use console::{CONSOLE, kprintln};
 
 #[no_mangle]
 pub unsafe extern "C" fn kmain() {
@@ -37,17 +35,13 @@ pub unsafe extern "C" fn kmain() {
         spin_sleep_ms(100);
     }
 
-    let mut uart = MiniUart::new();
     let mut indicator_led = Gpio::new(16).into_output();
 
-    loop {
-        let mut buf = [0u8; 16];
 
-        match uart.read(&mut buf) {
-            Ok(bytes) => {
-                uart.write(&buf[0..bytes]);
-            }
-        }
+    loop {
+        let byte = CONSOLE.lock().read_byte();
+
+        kprintln!("Welcome to the Galaxy.");
 
         indicator_led.set();
         spin_sleep_ms(25);
