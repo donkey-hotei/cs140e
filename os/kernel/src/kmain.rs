@@ -9,6 +9,7 @@
 #![feature(ptr_internals)]
 
 extern crate pi;
+extern crate core;
 extern crate stack_vec;
 
 pub mod lang_items;
@@ -18,7 +19,11 @@ pub mod shell;
 
 use pi::gpio::Gpio;
 use pi::timer::spin_sleep_ms;
-use console::{CONSOLE, kprintln};
+use console::{kprintln};
+
+fn run_shell() {
+    shell::shell("λ >>");
+}
 
 #[no_mangle]
 pub unsafe extern "C" fn kmain() {
@@ -37,14 +42,11 @@ pub unsafe extern "C" fn kmain() {
 
     let mut indicator_led = Gpio::new(16).into_output();
 
+    indicator_led.set();
+    spin_sleep_ms(50);
+    indicator_led.clear();
 
-    loop {
-        let byte = CONSOLE.lock().read_byte();
+    kprintln!("Welcome to the Galaxy!");
 
-        kprintln!("Welcome to the Galaxy.");
-
-        indicator_led.set();
-        spin_sleep_ms(25);
-        indicator_led.clear();
-    }
+    loop { run_shell() }
 }
