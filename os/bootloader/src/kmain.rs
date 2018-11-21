@@ -24,6 +24,25 @@ fn jump_to(addr: *mut u8) -> ! {
 }
 
 #[no_mangle]
-pub extern "C" fn kmain() {
-    // FIXME: Implement the bootloader.
+pub unsafe extern "C" fn kmain() {
+    use std::slice;
+
+    let mut region: &mut [u8] =
+        slice::from_raw_parts_mut(BINARY_START, MAX_BINARY_SIZE);
+    let mut uart = pi::uart::MiniUart::new();
+
+    uart.set_read_timeout(750);
+
+    loop {
+        match xmodem::Xmodem::receive(&mut uart, &mut region) {
+            Ok(_received_bytes) => {
+                break
+            },
+            Err(_) => {
+                continue
+            }
+        }
+    }
+
+    jump_to(BINARY_START)
 }
