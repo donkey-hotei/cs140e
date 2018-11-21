@@ -1,0 +1,10 @@
+Pieces used to construct the shell:
+    * `StackVec` was used to store user input on the stack as well as to 
+      store the parsed command-line arguements!
+    * `MiniUart` driver was used to communicate to the Pi via it's built-in UART with
+      the `screen` command.
+      + In turn used `Gpio` driver: that was written to interface
+        generally with the Pi's GPIO, in this case setting the TX/RX pins to use
+        alternative function 5, which for them means TXD1 and RXD1.
+    * `Console`: Singleton used to make communication to the Pi via our MiniUart
+       driver available.
