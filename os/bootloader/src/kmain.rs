@@ -3,6 +3,10 @@
 extern crate xmodem;
 extern crate pi;
 
+use std::slice;
+use pi::gpio::Gpio;
+use pi::timer::spin_sleep_ms;
+
 pub mod lang_items;
 
 /// Start address of the binary to load and of the bootloader.
@@ -25,11 +29,10 @@ fn jump_to(addr: *mut u8) -> ! {
 
 #[no_mangle]
 pub unsafe extern "C" fn kmain() {
-    use std::slice;
-
     let mut region: &mut [u8] =
         slice::from_raw_parts_mut(BINARY_START, MAX_BINARY_SIZE);
     let mut uart = pi::uart::MiniUart::new();
+    let mut wait_led = Gpio::new(16).into_output();
 
     uart.set_read_timeout(750);
 
@@ -39,6 +42,10 @@ pub unsafe extern "C" fn kmain() {
                 break
             },
             Err(_) => {
+                wait_led.set();
+                spin_sleep_ms(100);
+                wait_led.clear();
+
                 continue
             }
         }
