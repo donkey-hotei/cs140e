@@ -7,13 +7,16 @@ CCFLAGS ?= -Wall -O2 -nostdlib -nostartfiles -ffreestanding -pie -fpie
 LDFLAGS ?= --gc-sections -static -nostdlib -nostartfiles --no-dynamic-linker
 XARGO ?= CARGO_INCREMENTAL=0 RUST_TARGET_PATH="$(shell pwd)" xargo
 
+TTYWRITE ?= ttywrite
+PI_TTY ?= /dev/ttyUSB0
+
 LD_LAYOUT := ext/layout.ld
 
 RUST_BINARY := $(shell cat Cargo.toml | grep name | cut -d\" -f 2 | tr - _)
 RUST_BUILD_DIR := target/$(TARGET)
 RUST_DEBUG_LIB := $(RUST_BUILD_DIR)/debug/lib$(RUST_BINARY).a
 RUST_RELEASE_LIB := $(RUST_BUILD_DIR)/release/lib$(RUST_BINARY).a
-
+RUST_LIB_DEPS = ../pi/src/* ../pi/src/*/**
 RUST_DEPS = Xargo.toml Cargo.toml build.rs $(LD_LAYOUT) src/*
 EXT_DEPS = $(BUILD_DIR)/init.o
 
@@ -21,7 +24,7 @@ BUILD_DIR := build
 KERNEL := $(BUILD_DIR)/$(RUST_BINARY)
 RUST_LIB := $(BUILD_DIR)/$(RUST_BINARY).a
 
-.PHONY: all clean check
+.PHONY: all clean check install
 
 VPATH = ext
 
@@ -29,6 +32,9 @@ all: $(KERNEL).hex $(KERNEL).bin
 
 check:
 	@$(XARGO) check --target=$(TARGET)
+
+install: $(KERNEL).bin
+	$(TTYWRITE) -i $< $(PI_TTY)
 
 $(RUST_DEBUG_LIB): $(RUST_DEPS)
 	@echo "+ Building $@ [xargo]"
