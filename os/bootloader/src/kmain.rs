@@ -38,7 +38,13 @@ pub unsafe extern "C" fn kmain() {
 
     loop {
         match xmodem::Xmodem::receive(&mut uart, &mut region) {
-            Ok(_received_bytes) => {
+            Ok(received_bytes) => {
+                for _ in 0..received_bytes {
+                    wait_led.set();
+                    spin_sleep_ms(100);
+                    wait_led.clear();
+                }
+
                 break
             },
             Err(_) => {

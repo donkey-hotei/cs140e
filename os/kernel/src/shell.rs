@@ -23,6 +23,7 @@ impl<'a> Command<'a> {
     /// arguments than `buf` can hold, returns `Error::TooManyArgs`.
     fn parse(s: &'a str, buf: &'a mut [&'a str]) -> Result<Command<'a>, Error> {
         let mut args = StackVec::new(buf);
+
         for arg in s.split(' ').filter(|a| !a.is_empty()) {
             args.push(arg).map_err(|_| Error::TooManyArgs)?;
         }
@@ -67,6 +68,9 @@ pub fn shell(prefix: &str) -> ! {
     use std::io::Write;
 
     loop {
+        /*
+         * Local storage for user commands, stored on the stack.
+         */
         let mut buf_storage = [0u8; 512];
         let mut buf = StackVec::new(&mut buf_storage);
 

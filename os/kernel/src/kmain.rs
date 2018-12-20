@@ -46,7 +46,7 @@ pub unsafe extern "C" fn kmain() {
     spin_sleep_ms(50);
     indicator_led.clear();
 
-    kprintln!("Welcome to the Galaxy!");
+    kprintln!("Welcome to the Galaxy.");
 
     loop { run_shell() }
 }
