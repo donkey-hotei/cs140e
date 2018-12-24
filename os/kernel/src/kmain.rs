@@ -7,19 +7,26 @@
 #![feature(attr_literals)]
 #![feature(never_type)]
 #![feature(ptr_internals)]
+#![feature(allocator_api)]
 
 extern crate pi;
 extern crate core;
 extern crate stack_vec;
 
+pub mod allocator;
 pub mod lang_items;
 pub mod mutex;
 pub mod console;
 pub mod shell;
 
+use allocator::Allocator;
+use console::{kprintln};
 use pi::gpio::Gpio;
 use pi::timer::spin_sleep_ms;
-use console::{kprintln};
+
+#[cfg(not(test))]
+// #[global_allocator]
+pub static ALLOCATOR: Allocator = Allocator::uninitialized();
 
 fn run_shell() {
     shell::shell("λ >>");
@@ -48,5 +55,9 @@ pub unsafe extern "C" fn kmain() {
 
     kprintln!("Welcome to the Galaxy.");
 
-    loop { run_shell() }
+    ALLOCATOR.initialize();
+
+    loop {
+        run_shell();
+    }
 }
