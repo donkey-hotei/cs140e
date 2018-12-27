@@ -1,9 +1,44 @@
+#[cfg(not(test))]
 #[lang = "eh_personality"] 
 pub extern fn eh_personality() {}
 
 use std::panic::PanicInfo;
+#[cfg(not(test))]
 #[panic_handler] #[no_mangle]
-pub extern fn panic_fmt(_info: &PanicInfo) -> ! { loop{} }
+pub extern fn panic_fmt(info: &PanicInfo) -> ! { 
+    use console::kprintln;
+
+    if let Some(location) = info.location() {
+        kprintln!(
+            r#"
+                   (
+              (      )     )
+                )   (    (
+               (          `
+           .-""^"""^""^"""^""-.
+         (//\\//\\//\\//\\//\\//)
+          ~\^^^^^^^^^^^^^^^^^^/~
+            `================`
+
+            The pi is overdone.
+
+    ---------- DON'T PANIC ----------
+
+    FILE: {:?}
+    LINE: {:?}
+    COL: {:?}
+
+    {}
+            "#,
+            location.file(),
+            location.line(),
+            location.column(),
+            info.message().unwrap()
+        );
+    }
+
+    loop { unsafe { asm!("wfe") } }
+}
 
 #[no_mangle]
 pub unsafe extern fn memcpy(dest: *mut u8, src: *const u8, n: usize) -> *mut u8 {

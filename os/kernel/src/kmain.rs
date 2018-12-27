@@ -8,6 +8,7 @@
 #![feature(never_type)]
 #![feature(ptr_internals)]
 #![feature(allocator_api)]
+#![feature(panic_info_message)]
 
 extern crate pi;
 extern crate core;
@@ -53,7 +54,7 @@ pub unsafe extern "C" fn kmain() {
     spin_sleep_ms(50);
     indicator_led.clear();
 
-    kprintln!("Welcome to the Galaxy.");
+    panic!("Welcome to the Galaxy.");
 
     ALLOCATOR.initialize();
 
