@@ -1,5 +1,4 @@
-The benefit of exposing safe interfaces to unsafe structures or operations in Rust is that
-the end-user doesn't have to be intimately concerned with memory management and can trust
-that the safe implmentation ensures that memory is managed properly under-the-hood. Yes,
-the same benefits could be found in C however, it would be a runtime cost as it's type system
-is inferior.
+Since the compiler cannot make guarantees that the end-user will always read the correct
+type of a raw union (i.e: memory unsafe). Exposing the raw union as an enum to the user
+of our pi library provides the advantages of unions but with memory safety since the
+enumeration will always keep track of whatever particular type it contains.
