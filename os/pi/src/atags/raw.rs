@@ -20,13 +20,12 @@ impl Atag {
 
     /// Returns the ATAG following `self`, if there is one.
     pub fn next(&self) -> Option<&Atag> {
-
         match self.tag {
-            NONE => None,
+            Atag::NONE => None,
             _ => {
                 let curr = self as *const Atag as *const u32;
                 let next: &Atag = unsafe {
-                    &*(curr.offset(self.dwords) as *const Atag)
+                    &*(curr.offset(self.dwords as isize) as *const Atag)
                 };
                 Some(next)
             }

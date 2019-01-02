@@ -24,6 +24,7 @@ use allocator::Allocator;
 use console::{kprintln};
 use pi::gpio::Gpio;
 use pi::timer::spin_sleep_ms;
+use pi::atags::Atags;
 
 #[cfg(not(test))]
 // #[global_allocator]
@@ -45,7 +46,7 @@ pub unsafe extern "C" fn kmain() {
 
     for ref mut led in loading_leds.iter_mut() {
         led.set();
-        spin_sleep_ms(100);
+        spin_sleep_ms(150);
     }
 
     let mut indicator_led = Gpio::new(16).into_output();
@@ -54,11 +55,11 @@ pub unsafe extern "C" fn kmain() {
     spin_sleep_ms(50);
     indicator_led.clear();
 
-    panic!("Welcome to the Galaxy.");
+    kprintln!("Welcome to the Galaxy.");
 
-    ALLOCATOR.initialize();
+    for atag in Atags::get() { kprintln!("{:#?}", atag); }
 
-    loop {
-        run_shell();
-    }
+    // ALLOCATOR.initialize();
+
+    loop { run_shell(); }
 }
