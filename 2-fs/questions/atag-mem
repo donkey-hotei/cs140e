@@ -1,0 +1,3 @@
+The MEM ATAG reports the Pi as having 994050048 bytes, or ~0.925781 GiB.
+which is .074219 GiB away from the Raspberry Pi's purported 1 GiB of RAM.
+This region of memory starts at 0x00000000.
