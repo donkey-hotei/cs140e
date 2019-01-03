@@ -21,7 +21,7 @@ pub mod console;
 pub mod shell;
 
 use allocator::Allocator;
-use console::{kprintln};
+use console::kprintln;
 use pi::gpio::Gpio;
 use pi::timer::spin_sleep_ms;
 use pi::atags::Atags;
@@ -57,9 +57,11 @@ pub unsafe extern "C" fn kmain() {
 
     kprintln!("Welcome to the Galaxy.");
 
-    for atag in Atags::get() { kprintln!("{:#?}", atag); }
+    for atag in Atags::get() { 
+        kprintln!("{:#?}", atag); 
+    }
 
-    // ALLOCATOR.initialize();
+    ALLOCATOR.initialize();
 
     loop { run_shell(); }
 }

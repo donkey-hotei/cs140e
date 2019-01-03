@@ -12,6 +12,7 @@ use core::alloc::{GlobalAlloc, Layout};
 // use std::cmp::max;
 use std::ptr::null_mut;
 
+use console::kprintln;
 /// Thread-safe (locking) wrapper around a particular memory allocator.
 #[derive(Debug)]
 pub struct Allocator(Mutex<Option<imp::Allocator>>);
@@ -32,6 +33,7 @@ impl Allocator {
     /// Panics if the system's memory map could not be retrieved.
     pub fn initialize(&self) {
         let (start, end) = memory_map().expect("failed to find memory map");
+        kprintln!("(start, end) = ({:?}, {:?})", start, end);
         *self.0.lock() = Some(imp::Allocator::new(start, end));
     }
 }
@@ -86,6 +88,7 @@ extern "C" {
     static _end: u8;
 }
 
+use pi::atags::Atags;
 /// Returns the (start address, end address) of the available memory on this
 /// system if it can be determined. If it cannot, `None` is returned.
 ///
@@ -93,5 +96,14 @@ extern "C" {
 fn memory_map() -> Option<(usize, usize)> {
     let binary_end = unsafe { (&_end as *const u8) as u32 };
 
-    unimplemented!("memory map fetch")
+    for atag in Atags::get() {
+        if let Some(mem) = atag.mem() {
+            return Some(
+                ((binary_end + mem.start) as usize,
+                 (binary_end + mem.size) as usize)
+            );
+        }
+    }
+
+    None
 }
