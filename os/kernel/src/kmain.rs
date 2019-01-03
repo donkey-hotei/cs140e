@@ -27,7 +27,7 @@ use pi::timer::spin_sleep_ms;
 use pi::atags::Atags;
 
 #[cfg(not(test))]
-// #[global_allocator]
+#[global_allocator]
 pub static ALLOCATOR: Allocator = Allocator::uninitialized();
 
 fn run_shell() {
@@ -58,7 +58,9 @@ pub unsafe extern "C" fn kmain() {
     kprintln!("Welcome to the Galaxy.");
 
     for atag in Atags::get() { 
-        kprintln!("{:#?}", atag); 
+        if let Some(mem) = atag.mem() {
+            kprintln!("{:#?}", mem);
+        }
     }
 
     ALLOCATOR.initialize();

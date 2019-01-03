@@ -9,10 +9,8 @@ mod tests;
 
 use mutex::Mutex;
 use core::alloc::{GlobalAlloc, Layout};
-// use std::cmp::max;
 use std::ptr::null_mut;
 
-use console::kprintln;
 /// Thread-safe (locking) wrapper around a particular memory allocator.
 #[derive(Debug)]
 pub struct Allocator(Mutex<Option<imp::Allocator>>);
@@ -33,12 +31,12 @@ impl Allocator {
     /// Panics if the system's memory map could not be retrieved.
     pub fn initialize(&self) {
         let (start, end) = memory_map().expect("failed to find memory map");
-        kprintln!("(start, end) = ({:?}, {:?})", start, end);
+
         *self.0.lock() = Some(imp::Allocator::new(start, end));
     }
 }
 
-unsafe impl<'a> GlobalAlloc for &'a Allocator {
+unsafe impl GlobalAlloc for Allocator {
     /// Allocates memory. Returns a pointer meeting the size and alignment
     /// properties of `layout.size()` and `layout.align()`.
     ///
