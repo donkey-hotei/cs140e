@@ -1,0 +1,5 @@
+The benefits of this are that all common
+code are in the same location avoiding the same code being written for every allocator.
+This goes well with Rust's power to abstract away details from the user and additionally
+allows the Rust compiler to perform some langauge-level optimizations without involving
+the allocator.
