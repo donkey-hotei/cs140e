@@ -99,8 +99,7 @@ fn memory_map() -> Option<(usize, usize)> {
     for atag in Atags::get() {
         if let Some(mem) = atag.mem() {
             return Some(
-                ((binary_end + mem.start) as usize,
-                 (binary_end + mem.size) as usize)
+                (binary_end as usize, (binary_end + mem.size) as usize)
             );
         }
     }
