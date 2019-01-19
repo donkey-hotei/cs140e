@@ -2,7 +2,6 @@
 #![feature(const_fn)]
 #![feature(asm)]
 #![feature(decl_macro)]
-#![feature(attr_literals)]
 #![feature(never_type)]
 
 #![cfg_attr(not(feature = "std"), no_std)]
