@@ -59,15 +59,14 @@ mod allocator {
     #[allow(dead_code)] mod bump;
     #[allow(dead_code)] mod bin;
 
-    use alloc::allocator::{AllocErr, Layout};
-    use alloc::raw_vec::RawVec;
+    use core::alloc::{AllocErr, Layout};
 
     macro test_allocators {
         (@$kind:ident, $name:ident, $mem:expr, |$info:pat| $block:expr) => {
             #[test]
             fn $name() {
-                let mem: RawVec<u8> = RawVec::with_capacity($mem);
-                let start = mem.ptr() as usize;
+                let mem: Vec<u8> = Vec::with_capacity($mem);
+                let start = mem.as_ptr() as usize;
                 let end = start + $mem;
 
                 let allocator = $kind::Allocator::new(start, end);
@@ -119,7 +118,7 @@ mod allocator {
 
     test_allocators!(bin_exhausted, bump_exhausted, 128, |(_, _, mut a)| {
         let e = a.alloc(layout!(1024, 128)).unwrap_err();
-        assert_eq!(e, AllocErr::Exhausted { request: layout!(1024, 128) })
+        assert_eq!(e, AllocErr)
     });
 
     test_allocators!(bin_alloc, bump_alloc, 8 * (1 << 20), |(start, end, a)| {
