@@ -1,0 +1,8 @@
+Checking out the source for `Vec` and `RawVec`, we can find the path that would eventually
+lead to `bin::Allocator::alloc` to be called:
+
+bin::Allocator::alloc(self, layout);
+alloc::raw_vec::RawVec::try_reserve(self, v.len(), 1);
+alloc::raw_vec::RawVec::reserve(self, v.len(), 1);
+core::Vec::reserve(self, 1);
+core::Vec::push(self, i);
